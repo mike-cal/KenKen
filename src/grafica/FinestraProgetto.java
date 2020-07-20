@@ -11,18 +11,22 @@ import specificCommand.CheckCommand;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 class FinestraGUI extends JFrame {
 
     private String titolo= "KENKEN";
 
-    private JMenuItem apri,salva,salvaConNome,esci,about;
+    private JMenuItem apri,salva,salvaConNome,esci,about, threeXthree, fourXfour,fiveXfive, sixXsix;
     private JPanel panel;
 
     private Grid griglia;
 
     //todo
     private int numSoluzioniDesiderate=2;
+
+    private File fileDiSalvataggio= null;
 
 
 
@@ -31,19 +35,22 @@ class FinestraGUI extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         //setSize(1000,1300);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                //per ora
-                System.exit(0);
+        addWindowListener( new WindowAdapter() {
+            public void windowClosing(WindowEvent e){
+                if( consensoUscita() ) System.exit(0);
             }
-        });
+        } );
+
 
         inizializza();
     }
 
 
     private void inizializza(){
+        AscoltatoreEventiAzione listener=new AscoltatoreEventiAzione();
+        panel= new JPanel();
+        panel.setBackground(new Color(0,149,237));
+
         ControllerMediator med= new ControllerMediator();
         JMenuBar menuBar= new JMenuBar();
         this.setJMenuBar(menuBar);
@@ -52,37 +59,35 @@ class FinestraGUI extends JFrame {
         menuBar.add(giocoMenu);
 
         JMenu tipo= new JMenu("Nuovo");
+
+        threeXthree = new JMenuItem("3 x 3");
+        fourXfour = new JMenuItem("4 x 4");
+        fiveXfive = new JMenuItem("5 x 5");
+        sixXsix = new JMenuItem("6 x 6");
+
+        tipo.add(threeXthree);
+        tipo.add(fourXfour);
+        tipo.add(fiveXfive);
+        tipo.add(sixXsix);
+
+
         giocoMenu.add(tipo);
 
         apri=new JMenuItem("Apri");
-        apri.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                /*
-                int dim=6;
-                KenBuilder builder= new KenBuilder();
-                KenParser ken= new KenParser(builder,dim);
-                ken.build();
-                griglia =builder.getGrid();
-                System.out.println(griglia);
-
-                 */
-
-            }
-        });
+        apri.addActionListener(listener);
 
         //todo
-        //apri.addActionListener();
+
         giocoMenu.add(apri);
 
         salva=new JMenuItem("Salva");
-        //salva.addActionListener(listener);
+        salva.addActionListener(listener);
         giocoMenu.add(salva);
         salvaConNome=new JMenuItem("Salva con nome");
-       // salvaConNome.addActionListener(listener);
+        salvaConNome.addActionListener(listener);
         giocoMenu.add(salvaConNome);
         esci=new JMenuItem("Esci");
-        //esci.addActionListener(listener);
+        esci.addActionListener(listener);
         giocoMenu.add(esci);
 
         //ALTRO
@@ -91,12 +96,16 @@ class FinestraGUI extends JFrame {
         JMenu helpMenu=new JMenu("Help");
         menuBar.add(helpMenu);
         about=new JMenuItem("About");
-        //about.addActionListener(listener);
+        about.addActionListener(listener);
         helpMenu.add(about);
+
+        menuIniziale();
+
+
 
         ////
 
-        Container c= getContentPane();
+        //Container c= getContentPane();
 
 
 
@@ -141,13 +150,13 @@ class FinestraGUI extends JFrame {
         c.add(p,BorderLayout.CENTER);
 
         */
-        GridController gcontr= new GridController(griglia,6,handler);
+        GridController gcontr= new GridController(this,griglia,6,handler,med);
 
         ActionController act= new ActionController(handler,med);
 
         SolutionController sol= new SolutionController(gcontr,handler2,numSoluzioniDesiderate,4,griglia,med);
 
-        med.setColleague(act,sol);
+        med.setColleague(act,sol,gcontr);
 
         getContentPane().add(gcontr,BorderLayout.CENTER);
         getContentPane().add(act,BorderLayout.WEST);
@@ -158,11 +167,116 @@ class FinestraGUI extends JFrame {
         dim= Toolkit.getDefaultToolkit().getScreenSize(); //La dimensione è impostata come la minima necessaria a visualizzare tutti i controlli
         this.setLocation((int)(dim.getWidth()-this.getWidth())/2,(int)(dim.getHeight()-this.getHeight())/2);
 
+        setResizable(false);
+        setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR) );
+
         setVisible(true);
     }
 
+    private void menuIniziale(){
+        salva.setEnabled(false);
+        salvaConNome.setEnabled(false);
+    }
 
-}
+    private class AscoltatoreEventiAzione implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+
+            if( e.getSource()==esci ){
+                if( consensoUscita() ) System.exit(0);
+            }
+            else if(e.getSource()==salva) {
+                //fileChooser
+                JFileChooser fc=new JFileChooser();
+
+                try {
+                    if(fileDiSalvataggio!=null) {
+                        int ans=JOptionPane.showConfirmDialog(null,"Sovrascrivere "+fileDiSalvataggio.getAbsolutePath()+" ?");
+                        if( ans==0 /*SI*/){
+                            griglia.salva(fileDiSalvataggio.getAbsolutePath());
+                        }else
+                            JOptionPane.showMessageDialog(null, "Nessun Salvataggio");
+                        return;
+                    }
+                    if(fc.showSaveDialog(null)==JFileChooser.APPROVE_OPTION) {
+                        fileDiSalvataggio= fc.getSelectedFile();
+                    }
+                    if(fileDiSalvataggio!=null) {
+                        griglia.salva(fileDiSalvataggio.getAbsolutePath());
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null,"Nessun Salvataggio!");
+                }catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            else if(e.getSource()==salvaConNome) {
+                //file chooser
+                JFileChooser fc=new JFileChooser();
+                try{
+                    if( fc.showSaveDialog(null)==JFileChooser.APPROVE_OPTION ){
+                        fileDiSalvataggio=fc.getSelectedFile();
+                    }
+                    if( fileDiSalvataggio!=null ){
+                        griglia.salva( fileDiSalvataggio.getAbsolutePath());
+                        //FinestraGUI.this.testo.setText("Hai salvato il contenuto della lista in: "+fileDiSalvataggio.getName());
+                        //FinestraGUI.this.corrente.setText("");
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null,"Nessun Salvataggio!");
+                }catch( Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+            else if(e.getSource()==apri) {
+                JFileChooser fc= new JFileChooser();
+                try {
+                    if(fc.showOpenDialog(null)==JFileChooser.APPROVE_OPTION) {
+                        if(! fc.getSelectedFile().exists()) {
+                            JOptionPane.showMessageDialog(null, "File Inesistente");
+                        }
+                        else {
+                            fileDiSalvataggio=fc.getSelectedFile();
+                            try {
+                                griglia = new Grid();
+                                griglia.carica(fileDiSalvataggio.getAbsolutePath());
+                                //FinestraGUI.this.textA.append(lista.toString()+"\n");
+                                //FinestraGUI.this.testo.setText("Hai caricato il contenuto della lista: "+fileDiSalvataggio.getName());
+                               // FinestraGUI.this.corrente.setText("");
+                                throw new IOException(); //fasullo
+                            }catch(IOException io) {
+                                JOptionPane.showMessageDialog(null, "Fallimento apertura. File malformato!");
+                            }
+                        }
+                    }
+                    else
+                        JOptionPane.showMessageDialog(null,"Nessuna apertura!");
+                }catch(Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            else if(e.getSource()==about) {
+                JOptionPane.showMessageDialog(null, "Gioco Kenken \n"
+                                + "Creator: Michele Calabrò \n"
+                                + "Matricola: 189535",
+                        "About",JOptionPane.PLAIN_MESSAGE);
+            }
+
+
+        }
+    }
+
+    private boolean consensoUscita(){
+        int option=JOptionPane.showConfirmDialog(
+                null, "Continuare ?", "Uscendo si perderanno i dati!",
+                JOptionPane.YES_NO_OPTION);
+        return option==JOptionPane.YES_OPTION;
+    }//consensoUscita
+
+}//finestraGUI
+
 public class FinestraProgetto {
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {

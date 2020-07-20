@@ -5,6 +5,7 @@ import command.CommandHandler;
 import command.HistoryCommandHandler;
 import composite.Grid;
 import specificCommand.CheckCommand;
+import specificCommand.ResetCommand;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,8 @@ public class ActionController extends JPanel implements PanelColleague {
     private Mediator mediator;
 
 
+
+
     private final int x=50,y=200,wd=70,h=40,distance=30;
 
     public ActionController(CommandHandler handler, Mediator mediator){
@@ -37,6 +40,8 @@ public class ActionController extends JPanel implements PanelColleague {
 
         this.cmdHandler=handler;
         this.mediator=mediator;
+
+
 
         setLayout(new GridLayout(4,1));
 
@@ -76,7 +81,7 @@ public class ActionController extends JPanel implements PanelColleague {
         //reset.setSize(50,50);
         reset.setFont(new Font("Times New Roman", Font.ROMAN_BASELINE| Font.ITALIC, 15));
         reset.addActionListener(evt ->{
-            //reset
+            this.mediator.panelChanged(this);
         });
 
         pReset.setBackground(Color.RED);

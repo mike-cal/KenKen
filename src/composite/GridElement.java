@@ -10,4 +10,6 @@ public interface GridElement {
         return null;
     }
 
+
+    Point getPoint();
 }

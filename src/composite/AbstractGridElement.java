@@ -1,6 +1,27 @@
 package composite;
 
-abstract class AbstractGridElement implements GridElement{
+import mvc.model.GraphicObject;
+import mvc.model.GridObjectListener;
+
+import java.util.LinkedList;
+import java.util.List;
+
+abstract class AbstractGridElement implements GridElement, GraphicObject {
+
+
+    private List<GridObjectListener> listeners = new LinkedList<>();
+
+    @Override
+    public void addGraphicObjectListener(GridObjectListener l) {
+        if (listeners.contains(l))
+            return;
+        listeners.add(l);
+    }
+
+    @Override
+    public void removeGraphicObjectListener(GridObjectListener l) {
+        listeners.remove(l);
+    }
 
     private CompositeGridElement parent;
 
@@ -11,4 +32,6 @@ abstract class AbstractGridElement implements GridElement{
     public void setParent(CompositeGridElement parent) {
         this.parent = parent;
     }
+
+
 }

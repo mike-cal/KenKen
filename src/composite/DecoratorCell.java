@@ -25,6 +25,16 @@ public class DecoratorCell extends AbstractGridElement {
         return cell.getValue();
     }
 
+    @Override
+    public void setValore(int oldValue) {
+
+    }
+
+    @Override
+    public Point getPoint() {
+        return null;
+    }
+
     public void setValue(int value){
         this.cell.setValore(value);
     }

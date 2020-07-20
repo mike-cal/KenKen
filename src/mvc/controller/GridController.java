@@ -8,18 +8,22 @@ import composite.Cage;
 import composite.Cell;
 import composite.Grid;
 import composite.GridElement;
+import composite.Point;
 import grafica.dialog.ChoiseNumber;
 import kenGenerator.builder.KenBuilder;
 import kenGenerator.parser.KenParser;
 import mvc.model.GraphicEvent;
+
 import mvc.model.GridObjectListener;
+import specificCommand.InsertCommand;
+import specificCommand.ResetCommand;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 
-public class GridController extends JComponent implements GridObjectListener {
+public class GridController extends JComponent implements GridObjectListener, PanelColleague {
 
     private int [][] matrice;
 
@@ -29,17 +33,37 @@ public class GridController extends JComponent implements GridObjectListener {
 
     private int dimensione;
 
-    private SpringLayout SpringLayout;
-
     private CommandHandler cmdHandler;
 
+    private ChoiseNumber choise;
+
+    private JButton reset;
+    private Mediator mediator;
 
 
-    public GridController(Grid grid,int dimensione,CommandHandler handler){
+
+    private JFrame owner;
+
+    //todo
+    public void setControlledGrid(Grid grid, int dimensione){
+        this.grid=grid;
+        this.dimensione=dimensione;
+    }
+
+    public GridController(JFrame owner,CommandHandler handler,Mediator mediator){
+        this(owner,null,0,handler,mediator);
+    }
+
+
+    public GridController(JFrame owner,Grid grid,int dimensione,CommandHandler handler,Mediator mediator){
         this.cmdHandler=handler;
         this.dimensione=dimensione;
         this.grid=grid;
+        this.owner=owner;
+        this.mediator= mediator;
         int dim=6;
+
+
         KenBuilder builder= new KenBuilder();
         KenParser ken= new KenParser(builder,dim);
         ken.build();
@@ -91,20 +115,29 @@ public class GridController extends JComponent implements GridObjectListener {
                 cella.setBorder(border);
                 griglia[i][j]=cella;
                 griglia[i][j].setEnabled(true);
-                griglia[i][j].setText(String.valueOf(value));
+                //griglia[i][j].setText(String.valueOf(value));
+                griglia[i][j].setText("");
+                int finalI = i;
+                int finalJ = j;
+                Grid finalGrid = grid;
                 griglia[i][j].addMouseListener(new MouseAdapter() {
+
                     @Override
                     public void mousePressed(MouseEvent e) {
                         super.mousePressed(e);
-                        ChoiseNumber c=new ChoiseNumber(dimensione);
-                        int l=c.getPressed();
-                        JTextField text=(JTextField) e.getSource();
-                        System.out.println(text.getLocation());
-                        //handler.handle(new InsertCommand(grid,new Point(3,2),l));
-                        matrice[3][2]=l;
-                        scrivi(matrice);
-                        text.setText(String.valueOf(l));
+
+                        choise = new ChoiseNumber(owner,dimensione);
+
+                        String valore= choise.getValore();
+                        System.out.println("cambio valore in posizione i: "+ finalI + " j: "+finalJ + " con valore: "+valore);
+
+                        if(!valore.equals("Annulla")) {
+                            GridElement c= finalGrid.getElementByPoint(new Point(finalI, finalJ));
+                            cmdHandler.handle(new InsertCommand(griglia[finalI][finalJ], valore));
+                            //controllaVincoli(finalGrid);
+                        }
                     }
+
                 });
 
 
@@ -112,15 +145,8 @@ public class GridController extends JComponent implements GridObjectListener {
 
         }
 
-        //setLayout(new SpringLayout());
-        //Container c= getContentPane();
-
-        //controlla todo
-        //SpringLayout = new SpringLayout ();
-        //setLayout(SpringLayout);
-
-        //setBackground(Color.BLUE);
-
+        reset= new JButton("Reset");
+        add(reset);
     }
 
     @Override
@@ -148,6 +174,19 @@ public class GridController extends JComponent implements GridObjectListener {
         }
     }//scrivi
 
+    public JTextField[][] getGridField(){
+        return this.griglia;
+    }
+
+    @Override
+    public void changed() {
+        mediator.panelChanged(this);
+    }
+
+    public void action(){
+        cmdHandler.handle(new ResetCommand(griglia));
+    }
+
     private class Ascoltatore extends WindowAdapter implements ActionListener,MouseListener {
 
 
@@ -160,7 +199,7 @@ public class GridController extends JComponent implements GridObjectListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            new ChoiseNumber(dimensione);
+            //new ChoiseNumber(dimensione);
         }
 
         @Override

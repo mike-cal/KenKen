@@ -5,6 +5,7 @@ import mvc.model.GridObjectListener;
 
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
+import java.io.*;
 import java.util.List;
 
 public class Grid extends AbstractCompositeGridElement  {
@@ -37,9 +38,19 @@ public class Grid extends AbstractCompositeGridElement  {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public void setValore(int oldValue) {
+        throw new UnsupportedOperationException();
+    }
+
 
     @Override
     public void setParent(CompositeGridElement parent) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Point getPoint() {
         throw new UnsupportedOperationException();
     }
 
@@ -81,5 +92,30 @@ public class Grid extends AbstractCompositeGridElement  {
         return sb.toString();
     }
 
+    public GridElement getElementByPoint(Point p){
+        for(GridElement cage: this.getElementList()){
+            Cage c=(Cage) cage;
+            for(GridElement cell: c.getElementList()){
+                if(cell.getPoint().equals(p))
+                    return cell;
+            }
+        }
+        return null;
+    }
+
+
+    public void carica(String nomeFile) throws FileNotFoundException,IOException {
+        //ObjectInputStream ois= new ObjectInputStream(new BufferedInputStream(new FileInputStream(nomeFile)));
+
+        System.out.println("file caricato");
+        //todo
+    }
+
+    public void salva(String nomeFile) throws FileNotFoundException, IOException{
+        ObjectOutputStream oos= new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFile)));
+
+        System.out.println("File salvato");
+        //todo
+    }
 
 }

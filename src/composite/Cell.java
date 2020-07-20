@@ -72,19 +72,10 @@ public class Cell extends AbstractGridElement /* implements GraphicObject*/ {
     }
 
 
-    private List<GridObjectListener> listeners = new LinkedList<>();
-/*
-    @Override
-    public void addGraphicObjectListener(GridObjectListener l) {
-        if (listeners.contains(l))
-            return;
-        listeners.add(l);
-    }
 
-    @Override
-    public void removeGraphicObjectListener(GridObjectListener l) {
-        listeners.remove(l);
-    }
+
+/*
+
 
     @Override
     public Point2D getPosition() {

@@ -1,7 +1,7 @@
 package mvc.model;
 
-import java.awt.geom.Dimension2D;
-import java.awt.geom.Point2D;
+import composite.Point;
+
 
 public interface GraphicObject {
 
@@ -9,8 +9,12 @@ public interface GraphicObject {
 
     void removeGraphicObjectListener(GridObjectListener l);
 
-    Point2D getPosition();
-    Dimension2D getDimension();
-    boolean contains(Point2D p);
+    int getValue();
+
+    void setValore(int oldValue);
+
+    //Point getPosition();
+
+
 
 }

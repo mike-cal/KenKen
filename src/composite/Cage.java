@@ -66,6 +66,11 @@ public class Cage extends AbstractCompositeGridElement implements Comparable<Cag
         return operationValue;
     }
 
+    @Override
+    public void setValore(int value) {
+        setOperationValue(value);
+    }
+
 
     @Override
     public void addChild(GridElement c) {
@@ -90,5 +95,10 @@ public class Cage extends AbstractCompositeGridElement implements Comparable<Cag
     @Override
     public int compareTo(Cage o) {
         return o.id-this.id;
+    }
+
+    @Override
+    public Point getPoint() {
+        throw new UnsupportedOperationException();
     }
 }
