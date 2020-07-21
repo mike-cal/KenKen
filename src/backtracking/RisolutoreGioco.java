@@ -16,7 +16,7 @@ public class RisolutoreGioco implements Risolutore {
     private Grid griglia;
     private int numSoluzioni;
 
-    private Backtracking backtracking;
+    private final Backtracking backtracking;
 
     private KenBuilder builder = new KenBuilder();
 
@@ -41,8 +41,6 @@ public class RisolutoreGioco implements Risolutore {
         this.griglia = builder.getGrid();
         this.backtracking = new Backtracking(this.dimensione,this.griglia);
 
-
-
     }
 
     //da Caricamento
@@ -58,8 +56,6 @@ public class RisolutoreGioco implements Risolutore {
         this.backtracking = new Backtracking(this.dimensione,this.griglia);
     }
 
-
-
     @Override
     public void resolve() {
         try {
@@ -70,8 +66,6 @@ public class RisolutoreGioco implements Risolutore {
 
         soluzioni= this.backtracking.getSoluzioni();
         risolto=true;
-
-
     }
 
     @Override
@@ -86,9 +80,7 @@ public class RisolutoreGioco implements Risolutore {
         return this.griglia;
     }
 
-
-
-
+    /*
     public static void main(String[] args) {
         Risolutore r= new RisolutoreGioco(4,20);
 
@@ -103,6 +95,8 @@ public class RisolutoreGioco implements Risolutore {
         }
     }
 
+     */
+
     public static void scrivi(int[][] a){
         for( int i=0; i<a.length; ++i ){
             for( int j=0; j<a[i].length; ++j )
@@ -112,5 +106,4 @@ public class RisolutoreGioco implements Risolutore {
     }//scrivi
 
 
-
-}
+}//RisolutoreGioco

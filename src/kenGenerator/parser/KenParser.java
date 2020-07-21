@@ -45,7 +45,7 @@ public class KenParser {
     public void build(){
         try {
             costruisci();
-        }catch (Exception e){ //Da personalizzare todo
+        }catch (Exception e){
             System.out.println(e);
             e.printStackTrace();
         }

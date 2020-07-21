@@ -6,7 +6,6 @@ public enum Operation {
         @Override
         public String toString() {
                 switch (this){
-                        //Simboli da modificare todo
                         case DIV -> {return "/";}
                         case SUM -> {return "+";}
                         case MUL -> {return "x";}

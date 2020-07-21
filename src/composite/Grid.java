@@ -2,26 +2,14 @@ package composite;
 
 
 import java.io.*;
-import java.util.Iterator;
-
 
 public class Grid extends AbstractCompositeGridElement  {
-
-
 
     private int dimensioneGriglia;
 
 
     public Grid(){}
 
-    //Costruttore di copia con valore celle a 0
-/*
-    public Grid(Grid g){
-        this.dimensioneGriglia=g.dimensioneGriglia;
-
-
-    }
-*/
     public int getDimensioneGriglia() {
         return dimensioneGriglia;
     }
@@ -123,9 +111,6 @@ public class Grid extends AbstractCompositeGridElement  {
             catch( ClassCastException e2 ){ ois.close(); throw new IOException(); }
             catch( EOFException e3 ){ ois.close(); break; }
         }
-
-        System.out.println("file caricato");
-        //todo
     }
 
     public void salva(String nomeFile) throws FileNotFoundException, IOException{
@@ -143,8 +128,6 @@ public class Grid extends AbstractCompositeGridElement  {
         for( GridElement cage: this) oos.writeObject((Cage)cage);
         oos.close();
 
-        System.out.println("File salvato");
-        //todo
     }
 
 }

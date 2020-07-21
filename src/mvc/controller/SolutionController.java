@@ -1,12 +1,7 @@
 package mvc.controller;
 
-import backtracking.Backtracking;
-
 import backtracking.Risolutore;
-import backtracking.RisolutoreGioco;
-import command.CommandHandler;
 import composite.Grid;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

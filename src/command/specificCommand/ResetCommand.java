@@ -1,7 +1,6 @@
-package specificCommand;
+package command.specificCommand;
 
 import command.Command;
-
 import javax.swing.*;
 
 public class ResetCommand implements Command {
@@ -10,7 +9,6 @@ public class ResetCommand implements Command {
     private JTextField[][] oldGriglia;
     private int[][] matrice;
 
-
     public ResetCommand(JTextField[][] griglia, int[][] matrice){
         this.griglia=griglia;
         oldGriglia = new JTextField[griglia.length][griglia.length];
@@ -18,7 +16,6 @@ public class ResetCommand implements Command {
         for(int i=0;i<griglia.length;i++) {
             for (int j = 0; j < griglia.length; j++) {
                 oldGriglia[i][j] = new JTextField(griglia[i][j].getText());
-
             }
         }
     }
@@ -49,4 +46,5 @@ public class ResetCommand implements Command {
         }
         return true;
     }
-}
+
+}//ResetCommand

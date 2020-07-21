@@ -9,9 +9,9 @@ public interface Risolutore {
 
 
 
-    public void resolve();
+    void resolve();
 
-    public ArrayList<int[][]> getSolutions();
+    ArrayList<int[][]> getSolutions();
 
-    public Grid getGrid();
+    Grid getGrid();
 }

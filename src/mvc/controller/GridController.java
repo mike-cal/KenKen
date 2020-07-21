@@ -7,12 +7,8 @@ import composite.Grid;
 import composite.GridElement;
 import composite.Point;
 import grafica.dialog.ChoiseNumber;
-import kenGenerator.builder.KenBuilder;
-import kenGenerator.parser.KenParser;
-import mvc.model.GraphicEvent;
-import mvc.model.GridObjectListener;
-import specificCommand.InsertCommand;
-import specificCommand.ResetCommand;
+import command.specificCommand.InsertCommand;
+import command.specificCommand.ResetCommand;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -21,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GridController extends JComponent implements GridObjectListener, PanelColleague {
+public class GridController extends JComponent implements  PanelColleague {
 
     private int [][] matrice;
 
@@ -37,41 +33,17 @@ public class GridController extends JComponent implements GridObjectListener, Pa
 
     private JButton reset;
     private Mediator mediator;
-
-
-
     private JFrame owner;
     private boolean disabilitato=false;
 
-    //todo
-    public void setControlledGrid(Grid grid, int dimensione){
-        this.grid=grid;
-        this.dimensione=dimensione;
-    }
-
-    public GridController(JFrame owner,CommandHandler handler,Mediator mediator){
-        this(owner,null,0,handler,mediator);
-    }
-
 
     public GridController(JFrame owner,Grid grid,int dimensione,CommandHandler handler,Mediator mediator){
+
         this.cmdHandler=handler;
         this.dimensione=dimensione;
         this.grid=grid;
         this.owner=owner;
         this.mediator= mediator;
-
-
-
-
-
-        //KenBuilder builder= new KenBuilder();
-        //KenParser ken= new KenParser(builder,dimensione);
-        //ken.build();
-        //this.grid =builder.getGrid();
-
-        //System.out.println(grid);
-
 
         matrice= new int[dimensione][dimensione];
         for(int i=0;i<dimensione;i++){
@@ -79,7 +51,6 @@ public class GridController extends JComponent implements GridObjectListener, Pa
                 matrice[i][j]=0;
         }
         griglia = new JTextField[dimensione][dimensione];
-
 
 
         int i,j,value;
@@ -198,22 +169,19 @@ public class GridController extends JComponent implements GridObjectListener, Pa
         }
     }
 
+    public void setControlledGrid(Grid grid, int dimensione){
+        this.grid=grid;
+        this.dimensione=dimensione;
+    }
 
     @Override
     public Dimension getPreferredSize() {
         Dimension ps = super.getPreferredSize();
         double x = ps.getWidth();
         double y = ps.getHeight();
-
-        //todo
         return ps;
     }
 
-    //ascoltatore
-    @Override
-    public void gridChanged(GraphicEvent e) {
-
-    }
 
     public static void scrivi(int[][] a){
         for( int i=0; i<a.length; ++i ){
@@ -224,9 +192,12 @@ public class GridController extends JComponent implements GridObjectListener, Pa
         }
     }//scrivi
 
+    /*
     public JTextField[][] getGridField(){
         return this.griglia;
     }
+
+     */
 
     @Override
     public void changed() {
@@ -267,8 +238,7 @@ public class GridController extends JComponent implements GridObjectListener, Pa
         }
 
         return notSoddisfatta.size();
-    }
-
+    }//controlloVincoli
 
     public void disabilitaPanel() {
         if(!disabilitato){

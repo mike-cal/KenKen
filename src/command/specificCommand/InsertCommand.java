@@ -1,26 +1,19 @@
-package specificCommand;
+package command.specificCommand;
 
 import command.Command;
-import composite.*;
-import mvc.model.GraphicObject;
-
 import javax.swing.*;
 
 
 public class InsertCommand implements Command {
 
-
-    Point punto;
-    JTextField object;
-
-    String newValue,oldValue;
+    private JTextField object;
+    private String newValue,oldValue;
 
 
     public InsertCommand(JTextField object, String value){
         this.object=object;
         this.oldValue= object.getText();
         this.newValue=value;
-
     }
 
     @Override
@@ -39,4 +32,5 @@ public class InsertCommand implements Command {
         object.setText(oldValue);
         return true;
     }
-}
+
+}//InsertCommand

@@ -2,10 +2,6 @@ package backtracking;
 
 import composite.*;
 import composite.Point;
-import kenGenerator.builder.KenBaseBuilder;
-import kenGenerator.builder.KenBuilder;
-import kenGenerator.parser.KenParser;
-
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -267,8 +263,6 @@ public class Backtracking implements Problema<Point,Integer> {
 
     }
 
-
-
     public static void scrivi(int[][] a){
         for( int i=0; i<a.length; ++i ){
             for( int j=0; j<a[i].length; ++j )
@@ -281,32 +275,4 @@ public class Backtracking implements Problema<Point,Integer> {
         return this.soluzioni;
     }
 
-    /*
-    public static void main(String[] args) {
-
-        for(int i=0; i<1;i ++){
-            int dim=6;
-            KenBaseBuilder builder= new KenBaseBuilder();
-            KenParser ken= new KenParser(builder,dim);
-            ken.build();
-            composite.Grid grid =builder.getGrid();
-           // System.out.println(grid);
-            System.out.println("RISOLVO: "+ i);
-            try {
-                new Backtracking(dim,grid).risolvi(Integer.MAX_VALUE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-
-        }
-
-        //System.out.println(grid);
-
-
-
-    }
-
-     */
 }

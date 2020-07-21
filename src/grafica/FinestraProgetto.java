@@ -20,21 +20,13 @@ class FinestraGUI extends JFrame {
     private JPanel panel;
 
     private Grid griglia;
-
-    //todo
-    private int numSoluzioniDesiderate=2;
-
     private File fileDiSalvataggio= null;
-
     private Risolutore risolutoreGioco;
-
-
 
     public FinestraGUI(){
         setTitle(titolo);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        //setSize(1000,1300);
         addWindowListener( new WindowAdapter() {
             public void windowClosing(WindowEvent e){
                 if( consensoUscita() ) System.exit(0);
@@ -44,8 +36,7 @@ class FinestraGUI extends JFrame {
 
         AscoltatoreEventiAzione listener=new AscoltatoreEventiAzione();
         panel= new JPanel();
-        panel.setBackground(new Color(0,149,237));
-
+        panel.setBackground(new Color(0, 68, 114));
 
         JMenuBar menuBar= new JMenuBar();
         this.setJMenuBar(menuBar);
@@ -206,7 +197,6 @@ class FinestraGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
 
-
             if( e.getSource()==esci ){
                 if( consensoUscita() ) System.exit(0);
             }
@@ -222,7 +212,6 @@ class FinestraGUI extends JFrame {
             }
             else if(e.getSource()==sixXsix){
                 inizializza(6,false);
-                System.out.println("nuova part");
             }
 
             else if(e.getSource()==salva) {
@@ -301,7 +290,6 @@ class FinestraGUI extends JFrame {
                                 + "Matricola: 189535",
                         "About",JOptionPane.PLAIN_MESSAGE);
             }
-
         }
     }
 

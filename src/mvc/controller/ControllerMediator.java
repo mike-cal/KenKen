@@ -1,6 +1,6 @@
 package mvc.controller;
 
-public class ControllerMediator  implements Mediator{
+public class ControllerMediator  implements Mediator {
 
     private ActionController action;
     private SolutionController solution;

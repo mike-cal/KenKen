@@ -43,7 +43,8 @@ abstract class AbstractCompositeGridElement extends AbstractGridElement implemen
         return new CellIterator();
     }
 
-    //TODO ITERATOR
+
+
     private class CellIterator implements Iterator<GridElement>{
         Iterator<GridElement> it= elements.iterator();
         private AbstractGridElement last= null;

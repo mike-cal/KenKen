@@ -20,7 +20,6 @@ public class HistoryCommandHandler implements CommandHandler{
     private int maxHistoryLength = 100;
 
     private LinkedList<Command> history = new LinkedList<>();
-
     private LinkedList<Command> redoList = new LinkedList<>();
 
     public HistoryCommandHandler() {
@@ -76,4 +75,4 @@ public class HistoryCommandHandler implements CommandHandler{
 
     }
 
-}
+}//HistoryCommandHandler

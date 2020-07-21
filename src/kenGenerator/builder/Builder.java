@@ -5,13 +5,11 @@ import composite.Operation;
 public interface Builder {
 
 
-    void openGrid(int dimension); //ok
+    void openGrid(int dimension);
 
-    void closeGrid(); //ok
+    void closeGrid();
 
     void openCage(int id);
-
-  //  void addMaster(Point point, int value, int id);
 
     void closeGage(Operation op, int opValue);
 

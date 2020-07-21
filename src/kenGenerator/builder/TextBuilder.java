@@ -33,14 +33,7 @@ public class TextBuilder implements Builder {
         System.out.println("Nuova Sezione "+ id);
 
     }
-/*
-    @Override
-    public void addMaster(Point point, int value, int id) {
-        //pw.println("aggiunta master con id "+id+" Posizione "+point.getX()+" "+point.getY()+" valore "+value);
 
-        System.out.println("aggiunta master con id "+id+" Posizione "+point.getX()+" "+point.getY()+" valore "+value);
-    }
-*/
     @Override
     public void closeGage(Operation op, int opValue) {
         //pw.print("Chiusura sezione con operazione "+op.toString()+" e valore: "+opValue);

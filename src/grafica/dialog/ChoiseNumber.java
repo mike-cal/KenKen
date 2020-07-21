@@ -28,7 +28,6 @@ public class ChoiseNumber extends JDialog implements ActionListener{
         this.dimensione=dimensione; //+ uno per cancellare
         setDimensioni();
 
-
         panel.setLayout(new GridLayout(dimensione+1,3));
         annulla= new JButton("Annulla");
         numbers= new JButton[dimensione];
@@ -40,12 +39,10 @@ public class ChoiseNumber extends JDialog implements ActionListener{
 
         for(int i=0;i<numbers.length;i++){
             numbers[i]= new JButton(String.valueOf(i+1));
-            //numbers[i].addActionListener(a);
-            //numbers[i].setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
             panel.add(numbers[i]);
             numbers[i].addActionListener(this);
-
         }
+
         add(panel);
 
         valore= "";
@@ -81,6 +78,7 @@ public class ChoiseNumber extends JDialog implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if(e.getSource()==annulla){
             ChoiseNumber.this.dispose();
         }
@@ -97,8 +95,7 @@ public class ChoiseNumber extends JDialog implements ActionListener{
         }
     }
 
-
-
+/*
 //funziona
     public static void main(String[] args) {
         JFrame f= new JFrame();
@@ -116,7 +113,10 @@ public class ChoiseNumber extends JDialog implements ActionListener{
         });
 
     }
-}
+
+ */
+
+}//ChoiseNumber
 
 
 

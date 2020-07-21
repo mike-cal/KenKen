@@ -40,15 +40,7 @@ public class KenBuilder implements Builder {
         curr.addChild(cage);
         curr=cage;
     }
-/*
-    @Override
-    public void addMaster(Point point, int value, int id) {
-        Cell c= new Cell(point.getX(),point.getY());
-        c.setValore(value);
-        DecoratorCell dc= new DecoratorCell(c,id);
-        curr.addChild(dc);
-    }
-*/
+
     @Override
     public void closeGage(Operation op,int opValue) {
         ((Cage)curr).setOperation(op,opValue);

@@ -88,4 +88,5 @@ public class ActionController extends JPanel implements PanelColleague {
         check.setEnabled(true);
         reset.setEnabled(true);
     }
-}
+
+}//ActionController
