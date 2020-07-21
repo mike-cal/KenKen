@@ -1,12 +1,9 @@
 package composite;
 
-import mvc.model.GraphicObject;
-import mvc.model.GridObjectListener;
 
-import java.awt.geom.Dimension2D;
-import java.awt.geom.Point2D;
 import java.io.*;
-import java.util.List;
+import java.util.Iterator;
+
 
 public class Grid extends AbstractCompositeGridElement  {
 
@@ -105,7 +102,27 @@ public class Grid extends AbstractCompositeGridElement  {
 
 
     public void carica(String nomeFile) throws FileNotFoundException,IOException {
-        //ObjectInputStream ois= new ObjectInputStream(new BufferedInputStream(new FileInputStream(nomeFile)));
+        ObjectInputStream ois= new ObjectInputStream(new BufferedInputStream(new FileInputStream(nomeFile)));
+
+        Cage cage=null;
+
+        this.getElementList().clear();
+        int dim=0;
+        try {
+            dim= (Integer) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        this.setDimensioneGriglia(dim);
+        for(;;) {
+            try {
+                cage=(Cage) ois.readObject();
+                this.addChild(cage);
+            }
+            catch( ClassNotFoundException e1 ){ ois.close(); throw new IOException(); }
+            catch( ClassCastException e2 ){ ois.close(); throw new IOException(); }
+            catch( EOFException e3 ){ ois.close(); break; }
+        }
 
         System.out.println("file caricato");
         //todo
@@ -113,6 +130,18 @@ public class Grid extends AbstractCompositeGridElement  {
 
     public void salva(String nomeFile) throws FileNotFoundException, IOException{
         ObjectOutputStream oos= new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(nomeFile)));
+
+        oos.writeObject(this.getDimensioneGriglia());
+        /*
+        Iterator<GridElement> it=this.iterator();
+        while(it.hasNext()) {
+            oos.writeObject(it.next());
+        }
+
+         */
+
+        for( GridElement cage: this) oos.writeObject((Cage)cage);
+        oos.close();
 
         System.out.println("File salvato");
         //todo

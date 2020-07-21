@@ -141,7 +141,6 @@ public class GridController extends JComponent implements GridObjectListener, Pa
 
                 griglia[i][j]=cella;
                 griglia[i][j].setEnabled(true);
-                //griglia[i][j].setText(String.valueOf(value));
                 griglia[i][j].setText("");
                 int finalI = i;
                 int finalJ = j;
@@ -240,8 +239,7 @@ public class GridController extends JComponent implements GridObjectListener, Pa
     }
 
     public int controlloVincoli(){
-        //todo Controllo Vincoli
-        System.out.println("check funziona");
+
         List<Point> notSoddisfatta= new ArrayList<>();
         for(GridElement cage: grid.getElementList()) {
             Cage c = (Cage) cage;

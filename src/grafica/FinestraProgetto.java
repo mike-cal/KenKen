@@ -118,7 +118,7 @@ class FinestraGUI extends JFrame {
     private GridController gcontr= null;
     private SolutionController sol =null;
 
-    private void inizializza(int dim){
+    private void inizializza(int dim,boolean caricato){
 
         if(act!= null)
             getContentPane().remove(act);
@@ -145,9 +145,16 @@ class FinestraGUI extends JFrame {
         }
 
         //GRIGLIA GIOCO
-        this.risolutoreGioco = new RisolutoreGioco(dim,nSol);
-        this.griglia = risolutoreGioco.getGrid();
-        System.out.println(griglia);
+        if(!caricato){
+            this.risolutoreGioco = new RisolutoreGioco(dim,nSol);
+            this.griglia = risolutoreGioco.getGrid();
+            System.out.println(griglia);
+        }
+        else{
+            this.risolutoreGioco = new RisolutoreGioco(this.griglia,dim,nSol);
+            System.out.println("Da caricamento" +griglia);
+        }
+
 
         //MEDIATOR AND HISTORYHANDLER
         if(med==null) med= new ControllerMediator();
@@ -204,17 +211,17 @@ class FinestraGUI extends JFrame {
                 if( consensoUscita() ) System.exit(0);
             }
             else if(e.getSource()==threeXthree){
-                inizializza(3);
+                inizializza(3,false);
 
             }
             else if(e.getSource()==fourXfour){
-                inizializza(4);
+                inizializza(4,false);
             }
             else if(e.getSource()==fiveXfive){
-                inizializza(5);
+                inizializza(5,false);
             }
             else if(e.getSource()==sixXsix){
-                inizializza(6);
+                inizializza(6,false);
                 System.out.println("nuova part");
             }
 
@@ -236,6 +243,7 @@ class FinestraGUI extends JFrame {
                     }
                     if(fileDiSalvataggio!=null) {
                         griglia.salva(fileDiSalvataggio.getAbsolutePath());
+                        JOptionPane.showMessageDialog(null,"Salvato con successo!");
                     }
                     else
                         JOptionPane.showMessageDialog(null,"Nessun Salvataggio!");
@@ -252,8 +260,7 @@ class FinestraGUI extends JFrame {
                     }
                     if( fileDiSalvataggio!=null ){
                         griglia.salva( fileDiSalvataggio.getAbsolutePath());
-                        //FinestraGUI.this.testo.setText("Hai salvato il contenuto della lista in: "+fileDiSalvataggio.getName());
-                        //FinestraGUI.this.corrente.setText("");
+                        JOptionPane.showMessageDialog(null,"Salvataggio con successo!");
                     }
                     else
                         JOptionPane.showMessageDialog(null,"Nessun Salvataggio!");
@@ -273,10 +280,10 @@ class FinestraGUI extends JFrame {
                             try {
                                 griglia = new Grid();
                                 griglia.carica(fileDiSalvataggio.getAbsolutePath());
-                                //FinestraGUI.this.textA.append(lista.toString()+"\n");
-                                //FinestraGUI.this.testo.setText("Hai caricato il contenuto della lista: "+fileDiSalvataggio.getName());
-                               // FinestraGUI.this.corrente.setText("");
-                                throw new IOException(); //fasullo
+                                inizializza(griglia.getDimensioneGriglia(),true);
+                                JOptionPane.showMessageDialog(null, "Impostazioni gioco caricate");
+
+
                             }catch(IOException io) {
                                 JOptionPane.showMessageDialog(null, "Fallimento apertura. File malformato!");
                             }
@@ -294,7 +301,6 @@ class FinestraGUI extends JFrame {
                                 + "Matricola: 189535",
                         "About",JOptionPane.PLAIN_MESSAGE);
             }
-
 
         }
     }

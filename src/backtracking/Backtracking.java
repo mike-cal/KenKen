@@ -252,7 +252,7 @@ public class Backtracking implements Problema<Point,Integer> {
 
     @Override
     public void scriviSoluzione(int nr_sol) {
-        //per ora
+
 
         int[][] tab = new int[N][N];
         for(int i=0;i<N;i++){
@@ -264,26 +264,9 @@ public class Backtracking implements Problema<Point,Integer> {
         soluzioni.add(tab);
 
         System.out.println("Soluzione nr " + nr_sol);
-        //scrivi(tabella);
-        /*for(int i=0;i<N;i++){
-            System.out.println(Arrays.toString(tabella[i]));
-        }
-
-         */
-
 
     }
-/*
-    @Override
-    public void stampaSoluzioni() {
-        Iterator<int[][]> it = soluzioni.iterator();
-        while(it.hasNext()){
-            System.out.println("stampa");
-            scrivi(it.next());
-        }
-    }
 
- */
 
 
     public static void scrivi(int[][] a){
