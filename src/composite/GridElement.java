@@ -10,6 +10,8 @@ public interface GridElement {
         return null;
     }
 
-
     Point getPoint();
+
+    void setValore(int oldValue);
+
 }

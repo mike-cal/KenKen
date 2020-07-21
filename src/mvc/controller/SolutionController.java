@@ -1,6 +1,6 @@
 package mvc.controller;
 
-import backtracking.Risolutore;
+import template.Risolutore;
 import composite.Grid;
 import javax.swing.*;
 import java.awt.*;

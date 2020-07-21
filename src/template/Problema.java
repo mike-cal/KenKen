@@ -1,4 +1,4 @@
-package backtracking;
+package template;
 
 public interface Problema<P, S> {
     P primoPuntoDiScelta();

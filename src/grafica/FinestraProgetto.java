@@ -1,7 +1,7 @@
 package grafica;
 
-import backtracking.Risolutore;
-import backtracking.RisolutoreGioco;
+import template.Risolutore;
+import template.RisolutoreGioco;
 import command.HistoryCommandHandler;
 import composite.Grid;
 import mvc.controller.*;

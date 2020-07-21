@@ -1,11 +1,10 @@
-package backtracking;
+package template;
 
 import composite.Grid;
 import kenGenerator.builder.KenBuilder;
 import kenGenerator.parser.KenParser;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class RisolutoreGioco implements Risolutore {
 

@@ -1,4 +1,4 @@
-package backtracking;
+package template;
 
 import composite.Grid;
 

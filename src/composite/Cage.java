@@ -97,6 +97,8 @@ public class Cage extends AbstractCompositeGridElement implements Comparable<Cag
         return o.id-this.id;
     }
 
+
+    //potrei restituire la cella master cioè quella che detiene il compito di mostrare a schermo l'operazione
     @Override
     public Point getPoint() {
         throw new UnsupportedOperationException();

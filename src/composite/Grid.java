@@ -85,7 +85,7 @@ public class Grid extends AbstractCompositeGridElement  {
                     return cell;
             }
         }
-        return null;
+        throw new IllegalArgumentException();
     }
 
 

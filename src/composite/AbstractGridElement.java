@@ -1,16 +1,14 @@
 package composite;
 
-import mvc.model.GraphicObject;
-import mvc.model.GridObjectListener;
-
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
 
-abstract class AbstractGridElement implements GridElement, GraphicObject, Serializable {
+abstract class AbstractGridElement implements GridElement,/* GraphicObject,*/ Serializable {
 
+
+    /*
 
     private List<GridObjectListener> listeners = new LinkedList<>();
+
 
     @Override
     public void addGraphicObjectListener(GridObjectListener l) {
@@ -23,6 +21,10 @@ abstract class AbstractGridElement implements GridElement, GraphicObject, Serial
     public void removeGraphicObjectListener(GridObjectListener l) {
         listeners.remove(l);
     }
+
+
+     */
+
 
     private CompositeGridElement parent;
 
