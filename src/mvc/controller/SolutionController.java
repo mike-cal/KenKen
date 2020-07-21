@@ -10,12 +10,11 @@ import composite.Grid;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SolutionController extends JPanel implements PanelColleague{
 
     private CommandHandler cmdHandler;
-
-    private JComponent pannelloGriglia;
 
     private Risolutore risolutore;
 
@@ -34,23 +33,31 @@ public class SolutionController extends JPanel implements PanelColleague{
     private JLabel numeroSol;
     private JTextField viewNumSol;
 
+    private JLabel numSolAttuale;
+    private JTextField viewNumSolAttuale;
+
     private JButton scopriSol, next, previous;
 
     private Mediator mediator;
 
-    public SolutionController(JComponent gridPanel, CommandHandler cmd,int numSol,int dimension,Grid griglia, Mediator mediator){
-        this.cmdHandler=cmd; //SolutionCommandHandler
-        this.pannelloGriglia=gridPanel;
-        this.numSolDesiderabili=numSol;
-        this.dimension=dimension;
-        this.griglia=griglia;
-        this.mediator=mediator;
+    private List<int[][]> soluzioni;
+    private int solAttuale=1;
 
-        this.risolutore= new RisolutoreGioco(  dimension,numSol);
+    public SolutionController(CommandHandler cmd,int numSol,int dimension,Risolutore risolutore, Mediator mediator){
+        //this.cmdHandler=cmd; //SolutionCommandHandler
+
+        this.numSolDesiderabili=numSol;
+        //this.dimension=dimension;
+
+        this.mediator=mediator;
+        this.risolutore=risolutore;
+
+        this.soluzioni= new ArrayList<>();
+
 
 
         //da settare con il backtracking
-        numMaxSolution=0;
+        this.numMaxSolution=numSol;
 
         setLayout(new BorderLayout());
 
@@ -62,8 +69,19 @@ public class SolutionController extends JPanel implements PanelColleague{
         viewNumSol.setText(String.valueOf(numSolDesiderabili));
         viewNumSol.setEditable(false);
 
+        numSolAttuale = new JLabel("Numero Sol Attuale:");
+        viewNumSolAttuale = new JTextField();
+        viewNumSolAttuale.setEditable(false);
+        viewNumSolAttuale.setText(String.valueOf(solAttuale));
+
+        numSolAttuale.setVisible(false);
+        viewNumSolAttuale.setVisible(false);
+
         indicatore.add(numeroSol);
         indicatore.add(viewNumSol);
+
+        indicatore.add(numSolAttuale);
+        indicatore.add(viewNumSolAttuale);
 
         scopriSol= new JButton("Vedi Soluzioni");
         previous= new JButton("Previous");
@@ -75,10 +93,25 @@ public class SolutionController extends JPanel implements PanelColleague{
 
         scopriSol.addActionListener(e -> {
             try {
+                //JDialog con numero di sol da visualizzare
                 risolutore.resolve();
-                previous.setEnabled(true);
-                next.setEnabled(true);
+
+                soluzioni = risolutore.getSolutions();
+                this.numMaxSolution= soluzioni.size();
+                this.viewNumSol.setText(String.valueOf(numMaxSolution));
+
+                this.solAttuale=1;
+
+                System.out.println("numero "+solAttuale );
+                scrivi(soluzioni.get(solAttuale-1));
+                if(solAttuale==numMaxSolution)
+                    next.setEnabled(false);
+                else
+                    next.setEnabled(true);
+
                 scopriSol.setEnabled(false);
+                numSolAttuale.setVisible(true);
+                viewNumSolAttuale.setVisible(true);
                 //todo
                 //collegarmi al panel della griglia
                 changed();
@@ -87,6 +120,36 @@ public class SolutionController extends JPanel implements PanelColleague{
             }
 
 
+        });
+        previous.addActionListener(e -> {
+            if(solAttuale>1){
+                solAttuale--;
+                changed();
+                viewNumSolAttuale.setText(String.valueOf(solAttuale));
+                System.out.println("numero "+solAttuale );
+                scrivi(soluzioni.get(solAttuale-1));
+                if(solAttuale<numMaxSolution) next.setEnabled(true);
+                System.out.println();
+            }
+            if(solAttuale==1) previous.setEnabled(false);
+
+
+        });
+
+        next.addActionListener(e -> {
+
+            if(solAttuale<numMaxSolution) {
+                solAttuale++;
+                changed();
+                viewNumSolAttuale.setText(String.valueOf(solAttuale));
+                System.out.println("numero "+solAttuale );
+                scrivi(soluzioni.get(solAttuale-1));
+                previous.setEnabled(true);
+            }
+            if(solAttuale==numMaxSolution)
+                next.setEnabled(false);
+
+            System.out.println();
         });
 
         solution.add(scopriSol);
@@ -99,9 +162,21 @@ public class SolutionController extends JPanel implements PanelColleague{
 
     }
 
+    public static void scrivi(int[][] a){
+        for( int i=0; i<a.length; ++i ){
+            for( int j=0; j<a[i].length; ++j )
+                System.out.printf("%8d",a[i][j]);
+            System.out.println();
+        }
+    }//scrivi
+
 
     @Override
     public void changed() {
         mediator.panelChanged(this);
+    }
+
+    public int[][] getSolution() {
+        return soluzioni.get(solAttuale-1);
     }
 }

@@ -1,11 +1,9 @@
 package kenGenerator.parser;
 
 import kenGenerator.builder.Builder;
-import kenGenerator.builder.KenBaseBuilder;
 import composite.Operation;
 import composite.Point;
 
-import java.io.PrintWriter;
 import java.util.*;
 
 public class KenParser {
@@ -150,9 +148,9 @@ public class KenParser {
 
         //Ho la lista dei punti
         //addMaster
-        builder.addCell(token.getX(),token.getY(),griglia[token.getX()][token.getY()]);
+        builder.addCell(token.getX(),token.getY(),griglia[token.getX()][token.getY()],true);
         for(Point p: listaPuntiSezione){
-            builder.addCell(p.getX(),p.getY(),griglia[p.getX()][p.getY()]);
+            builder.addCell(p.getX(),p.getY(),griglia[p.getX()][p.getY()], false);
         }
 
         //tutti i punti della sezione

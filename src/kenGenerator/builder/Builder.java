@@ -15,6 +15,6 @@ public interface Builder {
 
     void closeGage(Operation op, int opValue);
 
-    void addCell(int x, int y, int value);
+    void addCell(int x, int y, int value, boolean master);
 
 }

@@ -86,7 +86,7 @@ public class ChoiseNumber extends JDialog implements ActionListener{
         }
 
         if(e.getSource() == remove){
-            this.valore="0";
+            this.valore="";
             ChoiseNumber.this.dispose();
         }
 

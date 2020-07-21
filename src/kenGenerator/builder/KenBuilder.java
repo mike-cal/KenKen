@@ -56,9 +56,10 @@ public class KenBuilder implements Builder {
     }
 
     @Override
-    public void addCell(int x,int y, int value) {
+    public void addCell(int x, int y, int value, boolean master) {
         Cell c= new Cell(x,y);
         c.setValore(value);
+        if(master) c.setMaster();
         curr.addChild(c);
     }
 }

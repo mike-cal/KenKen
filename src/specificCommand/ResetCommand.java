@@ -8,11 +8,13 @@ public class ResetCommand implements Command {
 
     private JTextField[][] griglia;
     private JTextField[][] oldGriglia;
+    private int[][] matrice;
 
 
-    public ResetCommand(JTextField[][] griglia){
+    public ResetCommand(JTextField[][] griglia, int[][] matrice){
         this.griglia=griglia;
         oldGriglia = new JTextField[griglia.length][griglia.length];
+        this.matrice=matrice;
         for(int i=0;i<griglia.length;i++) {
             for (int j = 0; j < griglia.length; j++) {
                 oldGriglia[i][j] = new JTextField(griglia[i][j].getText());
@@ -27,6 +29,7 @@ public class ResetCommand implements Command {
         for(int i=0;i<griglia.length;i++){
             for(int j=0;j<griglia.length;j++){
                 griglia[i][j].setText("");
+                matrice[i][j]=0;
             }
         }
         return true;
@@ -38,6 +41,10 @@ public class ResetCommand implements Command {
         for(int i=0;i<griglia.length;i++){
             for(int j=0;j<griglia.length;j++){
                 griglia[i][j].setText(oldGriglia[i][j].getText());
+
+                if(oldGriglia[i][j].getText().length()==0) matrice[i][j]=0;
+                else
+                    matrice[i][j]=Integer.valueOf(oldGriglia[i][j].getText());
             }
         }
         return true;

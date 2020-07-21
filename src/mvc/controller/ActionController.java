@@ -9,6 +9,7 @@ import specificCommand.ResetCommand;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Handler;
 
 /*
 contiene i botti UNDO,REDO,RESET,CHECK
@@ -22,10 +23,6 @@ public class ActionController extends JPanel implements PanelColleague {
 
     private JButton undoButt,redoButt,check,reset;
 
-    private Grid griglia;
-
-    private JLabel dettaglioPartita;
-
     private Mediator mediator;
 
 
@@ -35,23 +32,18 @@ public class ActionController extends JPanel implements PanelColleague {
 
     public ActionController(CommandHandler handler, Mediator mediator){
 
-
-       // setLayout(new BoxLayout(null,BoxLayout.Y_AXIS));
-
         this.cmdHandler=handler;
         this.mediator=mediator;
-
-
 
         setLayout(new GridLayout(4,1));
 
         JPanel pUndo= new JPanel();
 
         undoButt = new JButton("Undo");
-        //undoButt.setBounds(x,y,wd,h);
+
         undoButt.setFont(new Font("Times New Roman", Font.ROMAN_BASELINE| Font.ITALIC, 15));
         undoButt.addActionListener(evt -> handler.handle(HistoryCommandHandler.NonExecutableCommands.UNDO));
-        pUndo.setBackground(Color.RED);
+        pUndo.setBackground(Color.BLUE);
 
         pUndo.add(undoButt);
 
@@ -62,7 +54,7 @@ public class ActionController extends JPanel implements PanelColleague {
         redoButt.setFont(new Font("Times New Roman", Font.ROMAN_BASELINE| Font.ITALIC, 15));
         redoButt.addActionListener(evt -> handler.handle(HistoryCommandHandler.NonExecutableCommands.REDO));
 
-        pRedo.setBackground(Color.ORANGE);
+        pRedo.setBackground(Color.RED);
         pRedo.add(redoButt);
 
         JPanel pCheck= new JPanel();
@@ -70,9 +62,9 @@ public class ActionController extends JPanel implements PanelColleague {
         check= new JButton("Checks");
         //check.setBounds(x+100,y+2*distance,wd,h);
         check.setFont(new Font("Times New Roman", Font.ROMAN_BASELINE| Font.ITALIC, 15));
-        check.addActionListener(evt -> handler.handle(new CheckCommand(griglia)));
+        check.addActionListener(evt -> this.mediator.panelChanged(this,"check"));
 
-        pCheck.setBackground(Color.ORANGE);
+        pCheck.setBackground(Color.BLUE);
         pCheck.add(check);
 
         JPanel pReset= new JPanel();
@@ -98,6 +90,10 @@ public class ActionController extends JPanel implements PanelColleague {
         add(pRedo);
         add(pCheck);
         add(pReset);
+    }
+
+    public void setCmdHandler(CommandHandler handler){
+        this.cmdHandler=handler;
     }
 
     @Override

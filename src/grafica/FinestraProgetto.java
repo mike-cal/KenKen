@@ -1,5 +1,7 @@
 package grafica;
 
+import backtracking.Risolutore;
+import backtracking.RisolutoreGioco;
 import command.HistoryCommandHandler;
 import command.SolutionCommandHandler;
 import composite.Grid;
@@ -13,6 +15,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Handler;
 
 class FinestraGUI extends JFrame {
 
@@ -28,6 +31,8 @@ class FinestraGUI extends JFrame {
 
     private File fileDiSalvataggio= null;
 
+    private Risolutore risolutoreGioco;
+
 
 
     public FinestraGUI(){
@@ -42,16 +47,11 @@ class FinestraGUI extends JFrame {
         } );
 
 
-        inizializza();
-    }
-
-
-    private void inizializza(){
         AscoltatoreEventiAzione listener=new AscoltatoreEventiAzione();
         panel= new JPanel();
         panel.setBackground(new Color(0,149,237));
 
-        ControllerMediator med= new ControllerMediator();
+
         JMenuBar menuBar= new JMenuBar();
         this.setJMenuBar(menuBar);
 
@@ -69,6 +69,11 @@ class FinestraGUI extends JFrame {
         tipo.add(fourXfour);
         tipo.add(fiveXfive);
         tipo.add(sixXsix);
+
+        threeXthree.addActionListener(listener);
+        fourXfour.addActionListener(listener);
+        fiveXfive.addActionListener(listener);
+        sixXsix.addActionListener(listener);
 
 
         giocoMenu.add(tipo);
@@ -100,68 +105,7 @@ class FinestraGUI extends JFrame {
         helpMenu.add(about);
 
         menuIniziale();
-
-
-
-        ////
-
-        //Container c= getContentPane();
-
-
-
-        HistoryCommandHandler handler = new HistoryCommandHandler();
-        SolutionCommandHandler handler2 = new SolutionCommandHandler();
-
-        JPanel p= new JPanel();//finto
-        /*
-        p.setSize(1200,900);
-        p.setLayout(new GridLayout(9,9));
-        for(int i=0;i<9;i++){
-            for(int j=0;j<9;j++) {
-                JTextField campoTesto = new JTextField("");
-                campoTesto.setBounds(50+40*j, 50+40*i, 150, 80);
-                campoTesto.setHorizontalAlignment(JTextField.CENTER);
-                campoTesto.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        super.mouseClicked(e);
-                        if(SwingUtilities.isRightMouseButton(e)){
-                            e.getComponent().setBackground(Color.BLUE);
-                        }
-
-                    }
-
-                    @Override
-                    public void mouseReleased(MouseEvent e) {
-                        super.mouseReleased(e);
-
-                        e.getComponent().setBackground(Color.BLACK);
-                    }
-                });
-
-                p.add(campoTesto);
-            }
-        }
-
-        p.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.BLACK));
-
-        p.setSize(1000,1000);
-
-        c.add(p,BorderLayout.CENTER);
-
-        */
-        GridController gcontr= new GridController(this,griglia,6,handler,med);
-
-        ActionController act= new ActionController(handler,med);
-
-        SolutionController sol= new SolutionController(gcontr,handler2,numSoluzioniDesiderate,4,griglia,med);
-
-        med.setColleague(act,sol,gcontr);
-
-        getContentPane().add(gcontr,BorderLayout.CENTER);
-        getContentPane().add(act,BorderLayout.WEST);
-        getContentPane().add(sol,BorderLayout.SOUTH);
-        pack();
+        //inizializza();
         Dimension dim= new Dimension(550,550);
         this.setSize(dim);
         dim= Toolkit.getDefaultToolkit().getScreenSize(); //La dimensione è impostata come la minima necessaria a visualizzare tutti i controlli
@@ -170,12 +114,80 @@ class FinestraGUI extends JFrame {
         setResizable(false);
         setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR) );
 
+
         setVisible(true);
     }
+
+    private ControllerMediator med=null;
+    private HistoryCommandHandler handler = null;
+    private SolutionCommandHandler handler2 = null;
+    private  ActionController act = null;
+    private GridController gcontr= null;
+
+    private void inizializza(int dim){
+
+
+
+        int nSol=1;
+
+        for(;;){
+            String input = JOptionPane.showInputDialog("Quante potenziali soluzioni vuoi vedere)");
+            try{
+                int x= Integer.parseInt(input);
+                if(x<0) throw new IllegalArgumentException();
+                if(x==0) break;
+                else nSol=x;
+                break;
+            }catch (RuntimeException e){
+                JOptionPane.showMessageDialog(this,"Nessun intero. Ripetere...");
+            }
+        }
+
+        //GRIGLIA GIOCO
+        risolutoreGioco = new RisolutoreGioco(dim,nSol);
+        this.griglia = risolutoreGioco.getGrid();
+        System.out.println(griglia);
+
+        //MEDIATOR AND HISTORYHANDLER
+        if(med==null) med= new ControllerMediator();
+
+
+
+        if(handler2==null) handler2 = new SolutionCommandHandler();
+
+        this.handler = new HistoryCommandHandler();
+
+        this.gcontr= new GridController(this,griglia,dim,handler,med);
+
+        if(act==null) act= new ActionController(handler,med);
+
+        SolutionController sol= new SolutionController(handler2,nSol,dim,this.risolutoreGioco,med);
+
+        med.setColleague(act,sol,gcontr);
+
+        getContentPane().add(gcontr,BorderLayout.CENTER);
+        getContentPane().add(act,BorderLayout.WEST);
+        getContentPane().add(sol,BorderLayout.SOUTH);
+        pack();
+        Dimension dimm= new Dimension(550,550);
+        this.setSize(dimm);
+        dimm= Toolkit.getDefaultToolkit().getScreenSize(); //La dimensione è impostata come la minima necessaria a visualizzare tutti i controlli
+        this.setLocation((int)(dimm.getWidth()-this.getWidth())/2,(int)(dimm.getHeight()-this.getHeight())/2);
+
+        setResizable(false);
+        setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR) );
+        menuAvviato();
+    }
+
+
 
     private void menuIniziale(){
         salva.setEnabled(false);
         salvaConNome.setEnabled(false);
+    }
+    private void menuAvviato(){
+        salva.setEnabled(true);
+        salvaConNome.setEnabled(true);
     }
 
     private class AscoltatoreEventiAzione implements ActionListener{
@@ -187,6 +199,21 @@ class FinestraGUI extends JFrame {
             if( e.getSource()==esci ){
                 if( consensoUscita() ) System.exit(0);
             }
+            else if(e.getSource()==threeXthree){
+                inizializza(3);
+
+            }
+            else if(e.getSource()==fourXfour){
+                inizializza(4);
+            }
+            else if(e.getSource()==fiveXfive){
+                inizializza(5);
+            }
+            else if(e.getSource()==sixXsix){
+                inizializza(6);
+                System.out.println("nuova part");
+            }
+
             else if(e.getSource()==salva) {
                 //fileChooser
                 JFileChooser fc=new JFileChooser();

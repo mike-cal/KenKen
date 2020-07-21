@@ -1,8 +1,5 @@
 package mvc.controller;
 
-
-//non ha senso forse todo
-
 import command.CommandHandler;
 import composite.Cage;
 import composite.Cell;
@@ -13,15 +10,16 @@ import grafica.dialog.ChoiseNumber;
 import kenGenerator.builder.KenBuilder;
 import kenGenerator.parser.KenParser;
 import mvc.model.GraphicEvent;
-
 import mvc.model.GridObjectListener;
 import specificCommand.InsertCommand;
 import specificCommand.ResetCommand;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GridController extends JComponent implements GridObjectListener, PanelColleague {
 
@@ -43,6 +41,7 @@ public class GridController extends JComponent implements GridObjectListener, Pa
 
 
     private JFrame owner;
+    private boolean disabilitato=false;
 
     //todo
     public void setControlledGrid(Grid grid, int dimensione){
@@ -61,15 +60,17 @@ public class GridController extends JComponent implements GridObjectListener, Pa
         this.grid=grid;
         this.owner=owner;
         this.mediator= mediator;
-        int dim=6;
 
 
-        KenBuilder builder= new KenBuilder();
-        KenParser ken= new KenParser(builder,dim);
-        ken.build();
-        grid =builder.getGrid();
 
-        System.out.println(grid);
+
+
+        //KenBuilder builder= new KenBuilder();
+        //KenParser ken= new KenParser(builder,dimensione);
+        //ken.build();
+        //this.grid =builder.getGrid();
+
+        //System.out.println(grid);
 
 
         matrice= new int[dimensione][dimensione];
@@ -79,11 +80,15 @@ public class GridController extends JComponent implements GridObjectListener, Pa
         }
         griglia = new JTextField[dimensione][dimensione];
 
-        Ascoltatore a= new Ascoltatore();
+
 
         int i,j,value;
-        for(GridElement cage: grid.getElementList()){
+        for(GridElement cage: this.grid.getElementList()){
             Cage c=(Cage) cage;
+            List<Point> punti = c.getElementList().stream()
+                                    .map(ce -> (Cell) ce)
+                                    .map(cell -> cell.getPoint())
+                                    .collect(Collectors.toList());
             for(GridElement cell: c.getElementList()){
                 Cell ce =(Cell) cell;
                 i=ce.getX();
@@ -94,37 +99,60 @@ public class GridController extends JComponent implements GridObjectListener, Pa
                 cella.setFont(new Font("", Font.BOLD, 20));
                 this.add(cella);
                 cella.setBounds(10+70*j, 10+70*i, 70, 70);
-                Border border= BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK);
-                if(i>4){
-                    border= BorderFactory.createMatteBorder(1,1,3,1,Color.BLACK);
+
+                int top=3, left=3,bottom=3,right=3;
+                Point adiacente= new Point();
+
+                //top
+                adiacente.setX(i-1);adiacente.setY(j);
+                if(i!=0 && punti.contains(adiacente)){
+                    top=1;
                 }
-                if(i==dimensione-1){
-                    border= BorderFactory.createMatteBorder(1,1,3,1,Color.BLACK);
+                //bottom
+                adiacente.setX(i+1);adiacente.setY(j);
+                if(i!=dimensione && punti.contains(adiacente)){
+                    bottom=1;
                 }
-                else if(i<2){
-                    border= BorderFactory.createMatteBorder(3,3,1,1,Color.BLACK);
+                //right
+                adiacente.setX(i);adiacente.setY(j+1);
+                if(j!=dimensione && punti.contains(adiacente)){
+                    right=1;
+
                 }
-                if(j>4){
-                    border= BorderFactory.createMatteBorder(3,1,3,1,Color.BLACK);
+                //left
+                adiacente.setX(i);adiacente.setY(j-1);
+                if(j!=0 && punti.contains(adiacente)){
+                    left=1;
                 }
-                else if(j<2){
-                    border= BorderFactory.createMatteBorder(1,3,1,3,Color.BLACK);
-                }
+                Border border= BorderFactory.createMatteBorder(top,left,bottom,right,Color.BLACK);
+
+
+
                 cella.setEditable(false);
                 cella.setHorizontalAlignment(JTextField.CENTER);
                 cella.setBorder(border);
+
+                if(ce.getMaster()){
+                    cella.setLayout(new BorderLayout());
+                    String op= c.getOperationValue()+c.getOperation().toString();
+                    JLabel lab= new JLabel(op);
+                    cella.add(lab,BorderLayout.NORTH);
+                }
+
                 griglia[i][j]=cella;
                 griglia[i][j].setEnabled(true);
                 //griglia[i][j].setText(String.valueOf(value));
                 griglia[i][j].setText("");
                 int finalI = i;
                 int finalJ = j;
-                Grid finalGrid = grid;
+                Grid finalGrid = this.grid;
                 griglia[i][j].addMouseListener(new MouseAdapter() {
 
                     @Override
                     public void mousePressed(MouseEvent e) {
                         super.mousePressed(e);
+
+                        if(!disabilitato){
 
                         choise = new ChoiseNumber(owner,dimensione);
 
@@ -134,12 +162,19 @@ public class GridController extends JComponent implements GridObjectListener, Pa
                         if(!valore.equals("Annulla")) {
                             GridElement c= finalGrid.getElementByPoint(new Point(finalI, finalJ));
                             cmdHandler.handle(new InsertCommand(griglia[finalI][finalJ], valore));
-                            //controllaVincoli(finalGrid);
+
+                            if(valore.length()==0)
+                                matrice[finalI][finalJ]=0;
+                            else {
+                                matrice[finalI][finalJ] = Integer.valueOf(valore);
+                                controllaVincita();
+                            }
+                            scrivi(matrice);
                         }
+                    }
                     }
 
                 });
-
 
             }
 
@@ -148,6 +183,22 @@ public class GridController extends JComponent implements GridObjectListener, Pa
         reset= new JButton("Reset");
         add(reset);
     }
+
+    private void controllaVincita() {
+        boolean trovato=false; //almeno uno non inserito
+        for(int i=0;i<dimensione;i++){
+            for(int j=0;j<dimensione;j++){
+                if(matrice[i][j]==0){
+                    trovato=true;
+                    break;
+                }
+            }
+        }
+        if(!trovato && controlloVincoli()==0){
+            JOptionPane.showMessageDialog(this,"Hai Vinto!");
+        }
+    }
+
 
     @Override
     public Dimension getPreferredSize() {
@@ -184,43 +235,53 @@ public class GridController extends JComponent implements GridObjectListener, Pa
     }
 
     public void action(){
-        cmdHandler.handle(new ResetCommand(griglia));
+        cmdHandler.handle(new ResetCommand(griglia,matrice));
+
     }
 
-    private class Ascoltatore extends WindowAdapter implements ActionListener,MouseListener {
-
-
-
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
+    public int controlloVincoli(){
+        //todo Controllo Vincoli
+        System.out.println("check funziona");
+        List<Point> notSoddisfatta= new ArrayList<>();
+        for(GridElement cage: grid.getElementList()) {
+            Cage c = (Cage) cage;
+            for (GridElement cell : c.getElementList()) {
+                Cell ce = (Cell) cell;
+                int x= ce.getX(),y=ce.getY();
+                if(matrice[x][y]!=0 && matrice[x][y]!= ce.getValue()) {
+                    notSoddisfatta.add(new Point(x, y));
+                    System.out.println(matrice[x][y]+ "  "+ ce.getValue());
+                }
+            }
         }
+        if (notSoddisfatta.size() > 0) {
+            for(Point o: notSoddisfatta){
+                this.griglia[o.getX()][o.getY()].setForeground(Color.RED);
+                System.out.println(o);
+            }
 
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            //new ChoiseNumber(dimensione);
+            new Timer(2000,e -> {
+                for(Point o: notSoddisfatta){
+                    this.griglia[o.getX()][o.getY()].setForeground(Color.BLACK);
+
+                }
+            }).start();
         }
+        return notSoddisfatta.size();
+    }
 
-        @Override
-        public void mousePressed(MouseEvent e) {
 
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
+    public void disabilitaPanel() {
+        if(!disabilitato){
+            disabilitato=true;
         }
     }
 
+    public void viewSolution(int[][] sol) {
+        for(int i=0;i<griglia.length;i++){
+            for(int j=0;j<griglia.length;j++){
+                griglia[i][j].setText(String.valueOf(sol[i][j]));
+            }
+        }
+    }
 }

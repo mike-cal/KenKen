@@ -1,7 +1,7 @@
 package backtracking;
 
 import composite.Grid;
-import kenGenerator.builder.KenBaseBuilder;
+import kenGenerator.builder.KenBuilder;
 import kenGenerator.parser.KenParser;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class RisolutoreGioco implements Risolutore {
 
     private Backtracking backtracking;
 
-    private KenBaseBuilder builder = new KenBaseBuilder();
+    private KenBuilder builder = new KenBuilder();
 
     private KenParser kenParser;
 

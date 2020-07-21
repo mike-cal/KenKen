@@ -1,7 +1,6 @@
 package kenGenerator.builder;
 
 import composite.Operation;
-import composite.Point;
 
 import java.io.PrintWriter;
 
@@ -50,7 +49,7 @@ public class TextBuilder implements Builder {
 
 
     @Override
-    public void addCell(int x, int y, int value) {
+    public void addCell(int x, int y, int value, boolean b) {
        // pw.format("Cella in posizione [%d][%d] e valore %d",x,y,value);
         //pw.println();
         System.out.format("Cella in posizione [%d][%d] e valore %d",x,y,value);

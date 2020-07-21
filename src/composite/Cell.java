@@ -15,6 +15,8 @@ public class Cell extends AbstractGridElement /* implements GraphicObject*/ {
 
     private int valore= DEFAULT_VALUE;
 
+    private boolean master= false;
+
     private int x,y;
 
     public Cell(int x,int y){
@@ -71,6 +73,13 @@ public class Cell extends AbstractGridElement /* implements GraphicObject*/ {
         return new Point(x,y);
     }
 
+    public void setMaster(){
+        this.master=true;
+    }
+
+    public boolean getMaster(){
+        return this.master;
+    }
 
 
 

@@ -21,6 +21,17 @@ public class ControllerMediator  implements Mediator{
         }
         if(colleague == solution){
             action.action();
+            int[][] sol= solution.getSolution();
+            grid.disabilitaPanel();
+            grid.viewSolution(sol);
+        }
+
+    }
+
+    @Override
+    public void panelChanged(PanelColleague colleague, String opt) {
+        if(colleague == action){
+            grid.controlloVincoli();
         }
     }
 }
