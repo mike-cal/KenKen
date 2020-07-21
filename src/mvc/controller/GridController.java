@@ -267,6 +267,7 @@ public class GridController extends JComponent implements GridObjectListener, Pa
                 }
             }).start();
         }
+
         return notSoddisfatta.size();
     }
 

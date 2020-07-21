@@ -48,14 +48,6 @@ public class HistoryCommandHandler implements CommandHandler{
             System.out.println("eseguito");
             addToHistory(cmd);
         }
-        /*else {
-            // restituisce false: non può essere annullato
-            history.clear();
-        }
-        if (redoList.size() > 0)
-            redoList.clear();
-
-         */
     }
 
     private void redo() {

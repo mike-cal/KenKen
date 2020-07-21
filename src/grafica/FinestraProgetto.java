@@ -3,19 +3,14 @@ package grafica;
 import backtracking.Risolutore;
 import backtracking.RisolutoreGioco;
 import command.HistoryCommandHandler;
-import command.SolutionCommandHandler;
 import composite.Grid;
-import kenGenerator.builder.KenBuilder;
-import kenGenerator.parser.KenParser;
 import mvc.controller.*;
-import specificCommand.CheckCommand;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Handler;
 
 class FinestraGUI extends JFrame {
 
@@ -81,7 +76,6 @@ class FinestraGUI extends JFrame {
         apri=new JMenuItem("Apri");
         apri.addActionListener(listener);
 
-        //todo
 
         giocoMenu.add(apri);
 
@@ -114,17 +108,24 @@ class FinestraGUI extends JFrame {
         setResizable(false);
         setCursor( Cursor.getPredefinedCursor( Cursor.HAND_CURSOR) );
 
-
         setVisible(true);
     }
 
     private ControllerMediator med=null;
     private HistoryCommandHandler handler = null;
-    private SolutionCommandHandler handler2 = null;
-    private  ActionController act = null;
+
+    private ActionController act = null;
     private GridController gcontr= null;
+    private SolutionController sol =null;
 
     private void inizializza(int dim){
+
+        if(act!= null)
+            getContentPane().remove(act);
+        if(gcontr!=null)
+            getContentPane().remove(gcontr);
+        if(sol!=null)
+            getContentPane().remove(sol);
 
 
 
@@ -144,26 +145,29 @@ class FinestraGUI extends JFrame {
         }
 
         //GRIGLIA GIOCO
-        risolutoreGioco = new RisolutoreGioco(dim,nSol);
+        this.risolutoreGioco = new RisolutoreGioco(dim,nSol);
         this.griglia = risolutoreGioco.getGrid();
         System.out.println(griglia);
 
         //MEDIATOR AND HISTORYHANDLER
         if(med==null) med= new ControllerMediator();
-
-
-
-        if(handler2==null) handler2 = new SolutionCommandHandler();
-
         this.handler = new HistoryCommandHandler();
 
+        //Controller vari
         this.gcontr= new GridController(this,griglia,dim,handler,med);
 
         if(act==null) act= new ActionController(handler,med);
+        else {
+            act.setCmdHandler(this.handler);
+            act.azzera();
+        }
 
-        SolutionController sol= new SolutionController(handler2,nSol,dim,this.risolutoreGioco,med);
+        sol= new SolutionController(nSol,this.risolutoreGioco,med);
 
+
+        //IMPOSTO I COLLEAGUE
         med.setColleague(act,sol,gcontr);
+
 
         getContentPane().add(gcontr,BorderLayout.CENTER);
         getContentPane().add(act,BorderLayout.WEST);

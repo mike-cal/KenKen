@@ -1,33 +1,16 @@
 package mvc.controller;
 
-import command.Command;
+
 import command.CommandHandler;
 import command.HistoryCommandHandler;
-import composite.Grid;
-import specificCommand.CheckCommand;
-import specificCommand.ResetCommand;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.logging.Handler;
-
-/*
-contiene i botti UNDO,REDO,RESET,CHECK
-todo
- */
 
 public class ActionController extends JPanel implements PanelColleague {
 
-
     private CommandHandler cmdHandler; //HistoryCommandHandler
-
     private JButton undoButt,redoButt,check,reset;
-
     private Mediator mediator;
-
-
-
-
     private final int x=50,y=200,wd=70,h=40,distance=30;
 
     public ActionController(CommandHandler handler, Mediator mediator){
@@ -42,7 +25,7 @@ public class ActionController extends JPanel implements PanelColleague {
         undoButt = new JButton("Undo");
 
         undoButt.setFont(new Font("Times New Roman", Font.ROMAN_BASELINE| Font.ITALIC, 15));
-        undoButt.addActionListener(evt -> handler.handle(HistoryCommandHandler.NonExecutableCommands.UNDO));
+        undoButt.addActionListener(evt -> this.cmdHandler.handle(HistoryCommandHandler.NonExecutableCommands.UNDO));
         pUndo.setBackground(Color.BLUE);
 
         pUndo.add(undoButt);
@@ -50,9 +33,8 @@ public class ActionController extends JPanel implements PanelColleague {
         JPanel pRedo= new JPanel();
 
         redoButt = new JButton("Redo");
-        //redoButt.setBounds(x,y+distance,wd,h);
         redoButt.setFont(new Font("Times New Roman", Font.ROMAN_BASELINE| Font.ITALIC, 15));
-        redoButt.addActionListener(evt -> handler.handle(HistoryCommandHandler.NonExecutableCommands.REDO));
+        redoButt.addActionListener(evt -> this.cmdHandler.handle(HistoryCommandHandler.NonExecutableCommands.REDO));
 
         pRedo.setBackground(Color.RED);
         pRedo.add(redoButt);
@@ -60,7 +42,6 @@ public class ActionController extends JPanel implements PanelColleague {
         JPanel pCheck= new JPanel();
 
         check= new JButton("Checks");
-        //check.setBounds(x+100,y+2*distance,wd,h);
         check.setFont(new Font("Times New Roman", Font.ROMAN_BASELINE| Font.ITALIC, 15));
         check.addActionListener(evt -> this.mediator.panelChanged(this,"check"));
 
@@ -79,13 +60,6 @@ public class ActionController extends JPanel implements PanelColleague {
         pReset.setBackground(Color.RED);
         pReset.add(reset);
 
-
-
-
-
-
-
-
         add(pUndo);
         add(pRedo);
         add(pCheck);
@@ -102,11 +76,16 @@ public class ActionController extends JPanel implements PanelColleague {
     }
 
     public void action(){
-
         undoButt.setEnabled(false);
         redoButt.setEnabled(false);
         check.setEnabled(false);
-        reset.setEnabled(false); //forse todo
+        reset.setEnabled(false);
+    }
 
+    public void azzera() {
+        undoButt.setEnabled(true);
+        redoButt.setEnabled(true);
+        check.setEnabled(true);
+        reset.setEnabled(true);
     }
 }
