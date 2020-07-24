@@ -1,6 +1,6 @@
 package composite;
 
-public class Cell extends AbstractGridElement /* implements GraphicObject*/ {
+public class Cell extends AbstractGridElement  {
 
     private static int DEFAULT_VALUE=0;
 
@@ -35,12 +35,6 @@ public class Cell extends AbstractGridElement /* implements GraphicObject*/ {
         this.valore = valore;
     }
 
-    /*
-    public int getValore() {
-        return valore;
-    }
-
-     */
 
     public void setY(int y) {
         this.y = y;

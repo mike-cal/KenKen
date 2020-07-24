@@ -17,20 +17,6 @@ public class Cage extends AbstractCompositeGridElement implements Comparable<Cag
 
     public Cage(){}
 
-/*
-    //costruttore di copia
-    public Cage(Cage c){
-        this.operationValue=c.operationValue;
-        this.operation=c.operation;
-        Iterator<GridElement> it=c.iterator();
-
-        while(it.hasNext()){
-            AbstractGridElement a= (AbstractGridElement) it.next();
-            c.addChild(a);
-        }
-    }
-*/
-
 
     public int getId() {
         return id;

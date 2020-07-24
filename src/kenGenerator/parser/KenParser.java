@@ -249,13 +249,13 @@ public class KenParser {
         int c2= griglia[punti[1].getX()][punti[1].getY()];
 
         if( (c1%c2)==0 || (c2%c1)==0 )
-            return Operation.DIV;
-            //return op2div[random.nextInt(op2div.length)];
+            //return Operation.DIV;
+            return op2div[random.nextInt(op2div.length)];
 
         return op2[random.nextInt(op2.length)];
     }
 
-    private static enum Direction{
+    private enum Direction{
         RIGHT, LEFT, UNDER;
 
         public static Direction getDirection(){
@@ -284,7 +284,7 @@ public class KenParser {
         griglia[j] = t;
     }
 
-    public static int [][] trasposta(int [][]m){
+    private int [][] trasposta(int [][]m){
         int[][]t= new int[m[0].length][m.length];
 
         for(int i=0;i<t.length;i++)
@@ -294,7 +294,7 @@ public class KenParser {
         return t;
     }//trasposta
 
-    public static void scrivi(int[][] a){
+    private void scrivi(int[][] a){
         for( int i=0; i<a.length; ++i ){
             for( int j=0; j<a[i].length; ++j )
                 System.out.printf("%8d",a[i][j]);

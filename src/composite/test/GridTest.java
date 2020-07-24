@@ -118,7 +118,6 @@ public class GridTest {
         //valore operazione dell'ultimo cage
         int value = table.getElementList().get(numeroCage-1).getValue();
 
-        //int[][] table= table.
 
         //ripristino
 

@@ -1,4 +1,4 @@
-package mvc.controller;
+package controller;
 
 import command.CommandHandler;
 import composite.Cage;
@@ -7,8 +7,8 @@ import composite.Grid;
 import composite.GridElement;
 import composite.Point;
 import grafica.dialog.ChoiseNumber;
-import command.specificCommand.InsertCommand;
-import command.specificCommand.ResetCommand;
+import command.InsertCommand;
+import command.ResetCommand;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -31,7 +31,6 @@ public class GridController extends JComponent implements  PanelColleague {
 
     private ChoiseNumber choise;
 
-    private JButton reset;
     private Mediator mediator;
     private JFrame owner;
     private boolean disabilitato=false;
@@ -150,8 +149,7 @@ public class GridController extends JComponent implements  PanelColleague {
 
         }
 
-        reset= new JButton("Reset");
-        add(reset);
+
     }
 
     private void controllaVincita() {
@@ -169,10 +167,6 @@ public class GridController extends JComponent implements  PanelColleague {
         }
     }
 
-    public void setControlledGrid(Grid grid, int dimensione){
-        this.grid=grid;
-        this.dimensione=dimensione;
-    }
 
     @Override
     public Dimension getPreferredSize() {
@@ -192,12 +186,7 @@ public class GridController extends JComponent implements  PanelColleague {
         }
     }//scrivi
 
-    /*
-    public JTextField[][] getGridField(){
-        return this.griglia;
-    }
 
-     */
 
     @Override
     public void changed() {

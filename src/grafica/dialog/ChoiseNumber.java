@@ -20,6 +20,7 @@ public class ChoiseNumber extends JDialog implements ActionListener{
         setTitle("MODIFICA VALORE");
         panel= new JPanel();
         panel.setBackground(Color.white);
+
         setVisible(false);
 
         panel.setBorder(BorderFactory.createLineBorder(Color.BLUE,3));
@@ -28,7 +29,7 @@ public class ChoiseNumber extends JDialog implements ActionListener{
         this.dimensione=dimensione; //+ uno per cancellare
         setDimensioni();
 
-        panel.setLayout(new GridLayout(dimensione+1,3));
+        panel.setLayout(new GridLayout(this.dimensione+1,3));
         annulla= new JButton("Annulla");
         numbers= new JButton[dimensione];
 

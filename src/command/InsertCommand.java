@@ -1,4 +1,4 @@
-package command.specificCommand;
+package command;
 
 import command.Command;
 import javax.swing.*;

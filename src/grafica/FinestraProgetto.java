@@ -1,10 +1,14 @@
 package grafica;
 
+import controller.ActionController;
+import controller.ControllerMediator;
+import controller.GridController;
+import controller.SolutionController;
 import template.Risolutore;
 import template.RisolutoreGioco;
 import command.HistoryCommandHandler;
 import composite.Grid;
-import mvc.controller.*;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -123,7 +127,7 @@ class FinestraGUI extends JFrame {
         int nSol=1;
 
         for(;;){
-            String input = JOptionPane.showInputDialog("Quante potenziali soluzioni vuoi vedere)");
+            String input = JOptionPane.showInputDialog("Quante potenziali soluzioni vorresti vedere?");
             try{
                 int x= Integer.parseInt(input);
                 if(x<0) throw new IllegalArgumentException();

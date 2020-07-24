@@ -94,7 +94,9 @@ public class Grid extends AbstractCompositeGridElement  {
 
         Cage cage=null;
 
+
         this.getElementList().clear();
+        this.setDimensioneGriglia(-1);
         int dim=0;
         try {
             dim= (Integer) ois.readObject();

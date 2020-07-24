@@ -1,4 +1,4 @@
-package mvc.controller;
+package controller;
 
 public class ControllerMediator  implements Mediator {
 
@@ -32,6 +32,11 @@ public class ControllerMediator  implements Mediator {
     public void panelChanged(PanelColleague colleague, String opt) {
         if(colleague == action){
             grid.controlloVincoli();
+        }
+
+        if(colleague == solution){
+            int[][] sol= solution.getSolution();
+            grid.viewSolution(sol);
         }
     }
 }

@@ -97,7 +97,7 @@ public class Backtracking implements Problema<Point,Integer> {
 
     @Override
     public boolean assegnabile(Integer scelta, Point punto) {
-       // System.out.println("ass");
+
         int riga=punto.getX(), colonna=punto.getY();
 
         //1.1 controllo riga
@@ -105,11 +105,7 @@ public class Backtracking implements Problema<Point,Integer> {
             if(j!= colonna && tabella[riga][j]==scelta) return false;
             if(j!= riga && tabella[j][colonna]==scelta) return false;
         }
-/*
-        //1.2 controllo
-        for(int i=0;i<N;i++)
-            if(i!= riga && tabella[i][colonna]==scelta)return false;
-*/
+
         //<------------fine controllo matrice--------------->
 
         //<-----------inizio controllo operazioni----------->
@@ -117,7 +113,6 @@ public class Backtracking implements Problema<Point,Integer> {
         //devo recuperare il Cage di appartenenza
 
         Cage cageRelativo = getCageAppartenenza(punto);
-       // System.out.println(cageRelativo.getId());
         Operation operazione= cageRelativo.getOperation();
         int opValue= cageRelativo.getOperationValue();
 
@@ -126,7 +121,6 @@ public class Backtracking implements Problema<Point,Integer> {
             //System.out.println("Cella singola");
             return scelta == opValue;
         }
-
 
         //2.2 Almeno due celle
 
@@ -139,7 +133,6 @@ public class Backtracking implements Problema<Point,Integer> {
         switch (operazione){
             case DIV -> {
                 if(numDaInserire==2) return true;
-
                 //devo trovare l'altro valore gia inserito e confrontare l'operazione finale
                 //numDaInserire=1
                 Point p= listaPunti.get(0);
@@ -150,22 +143,13 @@ public class Backtracking implements Problema<Point,Integer> {
             case SUB -> {
 
                 if(numDaInserire==2) {
-                   // if (scelta == N) return false;
-                    //else
                     return true;
                 }
 
                 Point p= listaPunti.get(0);
-                //System.out.println("sottr "+p);
-                //System.out.println("scelta "+scelta+"ora "+tabella[p.getX()][p.getY()]+"op: "+opValue);
                 return Math.abs(scelta- tabella[p.getX()][p.getY()]) == opValue;
-
-
-
-
             }
             case MUL -> {
-                //System.out.println("op "+opValue+ " sc "+scelta);
 
                 if(opValue%scelta!=0) return false;
 
@@ -179,17 +163,6 @@ public class Backtracking implements Problema<Point,Integer> {
                 else //=1
                     return val*scelta==opValue;
 
-                 /*
-                 Utile per verificare se la soluzione è corretta
-
-                Iterator<GridElement> it = cageRelativo.iterator();
-                int mul=1;
-                while(it.hasNext()){
-                    Cell c=(Cell) it.next();
-                    mul*=tabella[c.getX()][c.getY()];
-                }
-                if(mul!= opValue) return false;
-                */
             }
             case SUM -> {
 
@@ -203,16 +176,6 @@ public class Backtracking implements Problema<Point,Integer> {
                 else
                     return val+scelta==opValue;
 
-                 /*
-                Iterator<GridElement> it = cageRelativo.iterator();
-                int sum=0;
-                while(it.hasNext()){
-                    Cell c=(Cell) it.next();
-                    sum+=tabella[c.getX()][c.getY()];
-                }
-                if(sum != opValue) return false;
-
-                */
             }
         }
         return false;
@@ -271,6 +234,7 @@ public class Backtracking implements Problema<Point,Integer> {
         }
     }//scrivi
 
+    @Override
     public ArrayList<int[][]> getSoluzioni(){
         return this.soluzioni;
     }

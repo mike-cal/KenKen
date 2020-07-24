@@ -1,5 +1,7 @@
 package template;
 
+import java.util.ArrayList;
+
 public interface Problema<P, S> {
     P primoPuntoDiScelta();
 
@@ -77,5 +79,5 @@ public interface Problema<P, S> {
     }// risolvi
 
 
-
+    ArrayList<int[][]> getSoluzioni();
 }

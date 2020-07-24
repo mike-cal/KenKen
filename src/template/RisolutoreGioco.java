@@ -15,7 +15,7 @@ public class RisolutoreGioco implements Risolutore {
     private Grid griglia;
     private int numSoluzioni;
 
-    private final Backtracking backtracking;
+    private final Problema backtracking;
 
     private KenBuilder builder = new KenBuilder();
 
